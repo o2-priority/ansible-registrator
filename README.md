@@ -13,7 +13,7 @@ Ansible role to run registrator docker container.
 - hosts: mydocker-host
 
   vars:
-    registrator_service_registry: consul
+    registrator_service_registry_backend: consul
     registrator_service_registry_host: <consul_host_fqdn|ip>
     registrator_service_registry_port: 8500
 

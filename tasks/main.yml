@@ -1,7 +1,7 @@
 ---
 
 - name: Validate registrator service registry
-  fail: msg="{{ registrator_service_registry }} service registry specified not supported by this role yet."
-  when: not registrator_service_registry | match("consul")
+  fail: msg="{{ registrator_service_registry_backend }} service registry specified not supported by this role yet."
+  when: not registrator_service_registry_backend | match("consul")
 
-- include: "{{ registrator_service_registry }}.yml"
+- include: "{{ registrator_service_registry_backend }}.yml"

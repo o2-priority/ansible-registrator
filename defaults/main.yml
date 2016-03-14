@@ -1,0 +1,6 @@
+---
+registrator_service_registry: consul
+registrator_service_registry_host: localhost
+registrator_service_registry_port: 8500
+
+registrator_service_registry_host_port: "{{ registrator_service_registry_host }}:{{ registrator_service_registry_port }}:"

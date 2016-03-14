@@ -1,0 +1,21 @@
+---
+
+- name: Start registrator
+  docker:
+    name: registrator
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+    hostname: "{{ ansible_hostname }}"
+    image: gliderlabs/registrator
+    command: -ip {{ ip }} consul://{{ registrator_service_registry_host_port }}
+  tags: [consul]
+
+- name: Start registrator KV
+  docker:
+    name: registrator-kv
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+    hostname: "{{ ansible_hostname }}"
+    image: gliderlabs/registrator
+    command: -ip {{ ip }} consulkv://{{ registrator_service_registry_host_port }}/services
+  tags: [consul]

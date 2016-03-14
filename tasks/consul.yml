@@ -1,21 +1,26 @@
 ---
 
+- name: Check connection to registrator service registry
+  wait_for: host={{ registrator_service_registry_host }} port={{ registrator_service_registry_port }}
+
 - name: Start registrator
   docker:
-    name: registrator
+    name:  registrator
+    image: gliderlabs/registrator
+    hostname: "{{ registrator_hostname }}"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
-    hostname: "{{ ansible_hostname }}"
-    image: gliderlabs/registrator
-    command: -ip {{ ip }} consul://{{ registrator_service_registry_host_port }}
+    command: -ip {{ registrator_ip }} consul://{{ registrator_service_registry_address }}
+    state: started
   tags: [consul]
 
 - name: Start registrator KV
   docker:
-    name: registrator-kv
+    name:  registrator-kv
+    image: gliderlabs/registrator
+    hostname: "{{ registrator_hostname }}"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
-    hostname: "{{ ansible_hostname }}"
-    image: gliderlabs/registrator
-    command: -ip {{ ip }} consulkv://{{ registrator_service_registry_host_port }}/services
+    command: -ip {{ registrator_ip }} consulkv://{{ registrator_service_registry_address }}/services
+    state: started
   tags: [consul]

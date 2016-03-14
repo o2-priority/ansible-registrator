@@ -9,12 +9,6 @@
     consul_primary_node: localhost
     consul_nodes:
       - "{{ ansible_default_ipv4.address }}"
-      - "10.10.10.10"
-      - "10.10.10.20"
-    docker_swarm_create_cluster:    true
-    docker_swarm_manager: true
-    docker_swarm_discovery_backend: token
-    docker_swarm_discovery_backend_url: "token://a1e87a8f8b369ba66b94f11fd3443e20"
 
   roles:
     - wunzeco.docker
@@ -25,8 +19,8 @@
   hosts: test-kitchen
 
   vars:
-    registrator_service_registry: consul
-    registrator_service_registry_host: localhost
+    registrator_service_registry_backend: consul
+    registrator_service_registry_host: "{{ ansible_default_ipv4.address }}"
     registrator_service_registry_port: 8500
     
   roles:

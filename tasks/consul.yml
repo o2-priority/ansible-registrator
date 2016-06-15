@@ -3,24 +3,56 @@
 - name: Check connection to registrator service registry
   wait_for: host={{ registrator_service_registry_host }} port={{ registrator_service_registry_port }}
 
+
+################
+##  registrator
+
+- name: Get image version of currently running registrator container
+  shell: docker inspect --format='{{ "{{" }} .Config.Image }}' registrator || true
+  register: v
+
+- name: Get cmd config of currently running registrator container
+  shell: docker inspect --format='{{ "{{" }} .Config.Cmd }}' registrator || true
+  register: r_cmd
+
+- name: Set desired state of registrator container
+  set_fact: _r_task_state=reloaded
+  when: v.stdout.split(':')[1]|default(false) != registrator_image_version or
+            r_cmd.stdout|default(false)|regex_replace('\[(.*)\]', '\\1') != registrator_command|regex_replace('\\s+', ' ')
+
 - name: Start registrator
   docker:
-    name:  registrator
-    image: gliderlabs/registrator
+    name:     registrator
+    image:    "gliderlabs/registrator:{{ registrator_image_version }}"
     hostname: "{{ registrator_hostname }}"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
-    command: -ip {{ registrator_ip }} consul://{{ registrator_service_registry_address }}
-    state: started
+    #command: -ip {{ registrator_ip }} consul://{{ registrator_service_registry_address }}
+    command: "{{ registrator_command }}"
+    state:   "{{ _r_task_state|default('started') }}"
   tags: [consul]
+
+
+###################
+##  registrator-kv
+
+- name: Get cmd config of currently running registrator-kv container
+  shell: docker inspect --format='{{ "{{" }} .Config.Cmd }}' registrator-kv || true
+  register: rkv_cmd
+
+- name: Set desired state of registrator container
+  set_fact: _rkv_task_state=reloaded
+  when: v.stdout.split(':')[1]|default(false) != registrator_image_version or
+            rkv_cmd.stdout|default(false)|regex_replace('\[(.*)\]', '\\1') != registrator_kv_command|regex_replace('\\s+', ' ')
 
 - name: Start registrator KV
   docker:
-    name:  registrator-kv
-    image: gliderlabs/registrator
+    name:     registrator-kv
+    image:    "gliderlabs/registrator:{{ registrator_image_version }}"
     hostname: "{{ registrator_hostname }}"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
-    command: -ip {{ registrator_ip }} consulkv://{{ registrator_service_registry_address }}/services
-    state: started
+    command: "{{ registrator_kv_command }}"
+    #command: -ip {{ registrator_ip }} consulkv://{{ registrator_service_registry_address }}/services
+    state:   "{{ _rkv_task_state|default('started') }}"
   tags: [consul]

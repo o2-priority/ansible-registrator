@@ -3,9 +3,11 @@ registrator
 
 Ansible role to run registrator docker container.
 
+
 ## Requirements
 
 - Docker host
+
 
 ## Example
 
@@ -20,6 +22,16 @@ Ansible role to run registrator docker container.
   roles:
     - wunzeco.registrator
 ```
+
+
+## Testing
+
+To run this role's integration tests
+
+```
+kitchen test
+```
+
 
 ## Dependencies
 none

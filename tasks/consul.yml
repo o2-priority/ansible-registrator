@@ -27,8 +27,8 @@
     hostname: "{{ registrator_hostname }}"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
-    #command: -ip {{ registrator_ip }} consul://{{ registrator_service_registry_address }}
     command: "{{ registrator_command }}"
+    restart_policy: "unless-stopped"
     state:   "{{ _r_task_state|default('started') }}"
   tags: [consul]
 
@@ -53,6 +53,6 @@
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
     command: "{{ registrator_kv_command }}"
-    #command: -ip {{ registrator_ip }} consulkv://{{ registrator_service_registry_address }}/services
+    restart_policy: "unless-stopped"
     state:   "{{ _rkv_task_state|default('started') }}"
   tags: [consul]

@@ -4,4 +4,4 @@
   fail: msg="{{ registrator_service_registry_backend }} service registry specified not supported by this role yet."
   when: not registrator_service_registry_backend | match("consul")
 
-- include: "{{ registrator_service_registry_backend }}.yml"
+- include_tasks: "{{ registrator_service_registry_backend }}.yml"

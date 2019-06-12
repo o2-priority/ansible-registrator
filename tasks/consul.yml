@@ -12,6 +12,9 @@
     name:     registrator
     image:    "gliderlabs/registrator:{{ registrator_image_version }}"
     hostname: "{{ registrator_hostname }}"
+    memory:     "{{ registrator_container_memory|default(omit) }}"
+    cpu_period: "{{ registrator_container_cpu_period|default(omit) }}"
+    cpu_quota:  "{{ registrator_container_cpu_quota|default(omit)|int }}"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
     command:  "{{ registrator_command }}"
@@ -28,6 +31,9 @@
     name:     registrator-kv
     image:    "gliderlabs/registrator:{{ registrator_image_version }}"
     hostname: "{{ registrator_hostname }}"
+    memory:     "{{ registrator_container_memory|default(omit) }}"
+    cpu_period: "{{ registrator_container_cpu_period|default(omit) }}"
+    cpu_quota:  "{{ registrator_container_cpu_quota|default(omit)|int }}"
     volumes:
       - /var/run/docker.sock:/tmp/docker.sock
     command:  "{{ registrator_kv_command }}"

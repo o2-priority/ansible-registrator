@@ -20,7 +20,7 @@ Ansible role to run registrator docker container.
     registrator_service_registry_port: 8500
 
   roles:
-    - wunzeco.registrator
+    - o2-priority.registrator
 ```
 
 

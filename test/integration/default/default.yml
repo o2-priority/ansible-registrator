@@ -4,6 +4,7 @@
   hosts: test-kitchen
 
   vars:
+    docker_package_version: '*'
     consul_datacenter:  kitchenDC
     consul_encrypt_key: '74d+D4bl59FeKo0r+U5lSA=='
     consul_primary_node: localhost
@@ -11,8 +12,8 @@
       - "{{ ansible_default_ipv4.address }}"
 
   roles:
-    - wunzeco.docker
-    - wunzeco.consul
+    - o2-priority.docker
+    - o2-priority.consul
 
 # Registrator
 - name: Install Registrator

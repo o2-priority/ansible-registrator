@@ -1,4 +1,4 @@
-require 'spec_helper'
+require '/tmp/kitchen/spec/spec_helper.rb'
 
 describe docker_image('gliderlabs/registrator:latest') do
   it { should exist }
